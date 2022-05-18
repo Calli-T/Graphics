@@ -49,7 +49,9 @@ class Cartecian extends JPanel {
         //MidpointLine(5, 3, 9, 6);
         //MidpointLine(9,6,5,3);
         //MidpointLine(1, 1, 1, 5);
-        MidpointLine(2, -1, 6, -3);
+        //MidpointLine(2, -1, 6, -1);
+        MidpointLine(2, -1, 6, -7, false);
+        MidpointLine(2, 1, 6, 7, false);
     }
 
     private void drawXY(){
@@ -89,7 +91,7 @@ class Cartecian extends JPanel {
         screen.fillOval(x*20-10, -(y*20+10), 20, 20);
     }
 
-    public void MidpointLine(int x0, int y0, int x1, int y1)
+    public void MidpointLine(int x0, int y0, int x1, int y1, boolean axisToggle)
     {
         if(x0 > x1){ // x축을 따라 감소하는 방향으로 가는 선일경우, 스왑
             int tempX = x0;
@@ -133,20 +135,35 @@ class Cartecian extends JPanel {
             incrNE = (dy-dx)*2; // NE점 채용시 결정변수 증가량에 x2를 하여 fraction 방지
             x = x0;
             y = y0;
-            WritePixel(x, y * toggle); // 시작하는 픽셀
-            while(x < x1){ // x축을 따라 전진
-                if(d <= 0){ //E를 집었을 때
-                    d += incrE;
-                    x++;
-                }else{ //NE를 집었을 때
-                    d += incrNE;
-                    x++;
-                    y++;
+            if(!axisToggle) {
+                WritePixel(x, y * toggle); // 시작하는 픽셀
+                while (x < x1) { // x축을 따라 전진
+                    if (d <= 0) { //E를 집었을 때
+                        d += incrE;
+                        x++;
+                    } else { //NE를 집었을 때
+                        d += incrNE;
+                        x++;
+                        y++;
+                    }
+                    WritePixel(x, y * toggle); /* The selected pixel closest to the line */
                 }
-                WritePixel(x, y * toggle); /* The selected pixel closest to the line */
+            } else{
+                WritePixel(y * toggle, x); // 시작하는 픽셀
+                while (x < x1) { // x축을 따라 전진
+                    if (d <= 0) { //E를 집었을 때
+                        d += incrE;
+                        x++;
+                    } else { //NE를 집었을 때
+                        d += incrNE;
+                        x++;
+                        y++;
+                    }
+                    WritePixel(y * toggle, x); /* The selected pixel closest to the line */
+                }
             }
-        } else if(Math.abs(a) == 1){ // 수평선
-
+        } else if(Math.abs(a) > 1){
+            MidpointLine(y0, x0, y1, x1, true);
         }
         
 
