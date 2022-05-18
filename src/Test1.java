@@ -1,10 +1,6 @@
 import java.awt.*;
-
 import javax.swing.*;
-
 import java.awt.geom.*;
-
-
 
 
 public class Test1 {
@@ -30,7 +26,6 @@ class Screen extends JFrame {
         add(cartecian, BorderLayout.CENTER);
         this.setLocationRelativeTo(null);    //창 가운데 위치
         setVisible(true);
-
     }
 
 }
@@ -40,13 +35,14 @@ class Cartecian extends JPanel {
 
     private Graphics2D screen;
 
+
     protected void paintComponent(Graphics g) {
         screen=(Graphics2D)g;
         screen.translate(500, 500); //원점의 위치
 
         drawXY();
         drawDottedLine();
-        //drawDot(20, 20);
+        drawDotEX();
     }
 
     private void drawXY(){
@@ -84,9 +80,17 @@ class Cartecian extends JPanel {
     }
     public void drawDot(int x, int y){
         screen.setColor(Color.BLACK);
-        screen.fillOval(x-5, y-5, 10, 10);
+        screen.fillOval(x-10, y-10, 20, 20);
     }
 }
+
+/*
+// 어느 축을 따를것인지 이슈
+0 < Math.abs(기울기) < 1의 경우 x축
+Math.abs(기울기) > 1의 경우 y축
+그 외의 경우는 상관 없음(편의상 x축사용)
+
+ */
 /*
 import java.awt.*;
 
