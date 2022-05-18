@@ -46,7 +46,10 @@ class Cartecian extends JPanel {
         drawXY();
         drawDottedLine();
 
-        MidpointLine(5, 3, 9, 6);
+        //MidpointLine(5, 3, 9, 6);
+        //MidpointLine(9,6,5,3);
+        //MidpointLine(1, 1, 1, 5);
+        MidpointLine(2, -1, 6, -3);
     }
 
     private void drawXY(){
@@ -83,31 +86,70 @@ class Cartecian extends JPanel {
     }
     public void WritePixel(int x, int y){ // 해당 라이브러리의 y는 일반적인 값의 음수, 즉, window top에서 부터의 거리
         screen.setColor(Color.BLACK);
-        screen.fillOval(x*20-10, -(y*20-10), 20, 20);
+        screen.fillOval(x*20-10, -(y*20+10), 20, 20);
     }
 
     public void MidpointLine(int x0, int y0, int x1, int y1)
     {
-        int dx, dy, incrE, incrNE, d, x, y;
-        dx = x1 - x0; //x값 증가량
-        dy = y1 - y0; //y값 증가량
-        d = dy*2 - dx; // 시작 결정 변수에 x2를 하여 fraction이 방지된 형태의 초기화
-        incrE = dy*2; // E점 채용시 결정변수 증가량에 x2를 하여 fraction 방지
-        incrNE = (dy-dx)*2; // NE점 채용시 결정변수 증가량에 x2를 하여 fraction 방지
-        x = x0;
-        y = y0;
-        WritePixel(x, y); // 시작하는 픽셀
-        while(x < x1){ // x축을 따라 전진
-            if(d <= 0){ //E를 집었을 때
-                d += incrE;
-                x++;
-            }else{ //NE를 집었을 때
-                d += incrNE;
-                x++;
-                y++;
-            }
-            WritePixel(x, y); /* The selected pixel closest to the line */
+        if(x0 > x1){ // x축을 따라 감소하는 방향으로 가는 선일경우, 스왑
+            int tempX = x0;
+            x0=x1;
+            x1 = tempX;
+            int tempY = y0;
+            y0=y1;
+            y1 = tempY;
         }
+
+        int dx = x1 - x0, dy = y1 - y0;
+        double a = 0;
+        if(dx != 0){ // dx가 0이 아니면 a값을 구해줌
+            a = (float)dy/(float)dx;
+        } else if(x1 == x0){ // x값이 같은경우, 수직선, 기울기 a는 정의되지않음
+            int smallY=0, bigY=0;
+            if(y0<y1){
+                smallY = y0; bigY=y1;
+            }
+            else {
+                smallY = y1; bigY=y0;
+            }
+            while(smallY <= bigY){
+                WritePixel(x0, smallY);
+                smallY++;
+            }
+            return;
+        }
+
+        if(Math.abs(a) < 1) {
+            int toggle = 1;
+            if(a < 0){
+                toggle = -1;
+                y0 = -y0; y1 = -y1;
+                dy = -dy;
+            }
+
+            int incrE, incrNE, d, x, y;
+            d = dy*2 - dx; // 시작 결정 변수에 x2를 하여 fraction이 방지된 형태의 초기화
+            incrE = dy*2; // E점 채용시 결정변수 증가량에 x2를 하여 fraction 방지
+            incrNE = (dy-dx)*2; // NE점 채용시 결정변수 증가량에 x2를 하여 fraction 방지
+            x = x0;
+            y = y0;
+            WritePixel(x, y * toggle); // 시작하는 픽셀
+            while(x < x1){ // x축을 따라 전진
+                if(d <= 0){ //E를 집었을 때
+                    d += incrE;
+                    x++;
+                }else{ //NE를 집었을 때
+                    d += incrNE;
+                    x++;
+                    y++;
+                }
+                WritePixel(x, y * toggle); /* The selected pixel closest to the line */
+            }
+        } else if(Math.abs(a) == 1){ // 수평선
+
+        }
+        
+
     }
 }
 
