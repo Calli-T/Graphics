@@ -51,25 +51,37 @@ class Cartecian extends JPanel {
         drawXY();
         drawDottedLine();
 
-        //기울기 양수이고 절대값이 1보다 작은 예제
+        // 기울기의 절대값이 1보다 작고 양수인 예제. Translation은(0, -1)만큼 적용되었음
         //setTranslation(0, -1);
         //MidpointLine(5, 3, 9, 6, false);
 
-        //setTranslation(0, 1);
-        //MidpointLine(9, 6, 5, 3, false);
+        //기울기의 절대값이 1보다 작고 음수인 예제. Translation은(3, 4)만큼 적용되었음
+        //setTranslation(3, 4);
+        //MidpointLine(-6, 3, -1, -1, false);
 
+        // x0 < x1때의 처리 방식을 보여주는 예제, 들어온 순서를 바꾸어 주사의 방향을 유지한다
+        //setTranslation(0, 1);
+        //MidpointLine(9, 6, -5, 3, false);
+
+        // 기울기가 무한한 예제, 예외처리, Translation은(-3, 1)만큼 적용되었음
         //setTranslation(-3, 1);
         //MidpointLine(1, 1, 1, 5, false);
-        //MidpointLine(2, -1, 6, -1, false);
 
+        // 기울기가 0이고 (-4, 4)만큼 Translation하는 예제
         //setTranslation(-4, 4);
         //MidpointLine(-4, 4, 4, 4, false);
 
+        // 기울기의 절대값이 1인 예제 2개
+        /*
         setTranslation(3, 3);
         MidpointLine(1, 1, 3, 3, false);
+        setTranslation(3, -1);
+        MidpointLine(0, -1, 3, -4, false);
+        */
 
+        // 기울기의 절대값이 1보다 크고, 음수인 예제, Translation이후 UI에 의해 자동으로 clipping된다
+        //setTranslation(7, -1);
         //MidpointLine(2, -1, 6, -7, false);
-        //MidpointLine(2, 1, 6, 7, false);
     }
 
     private void setTranslation(int x, int y){ // 원래의 선분을 검게 출력하고, 여기에 세팅된 대로 기존 선분을 Translation해서 붉은색으로 출력한다
